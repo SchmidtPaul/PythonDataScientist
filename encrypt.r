@@ -1,7 +1,16 @@
-# encrypt.r
 staticryptR::staticryptr(
-  files = c("docs/index.html", "docs/about.html"),
-  directory = "docs",
+  files = "_output/index.html",
+  directory = ".",
   password = "yourverylongpassword",
-  short = TRUE
+  short = TRUE,
+  print_cmd = FALSE
 )
+
+staticryptR::staticryptr(
+  files = "_output/about.html",
+  directory = ".",
+  password = "yourverylongpassword",
+  short = TRUE,
+  print_cmd = FALSE
+)
+

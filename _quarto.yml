@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: "./docs"    # Changed from _output to docs for GitHub Pages
+  output-dir: "./_output"
   post-render: encrypt.r
 
 website:
