@@ -1,5 +1,5 @@
 staticryptR::staticryptr(
-  files = "_output/index.html",
+  files = "docs/index.html",
   directory = ".",
   password = "yourverylongpassword",
   short = TRUE,
@@ -7,7 +7,7 @@ staticryptR::staticryptr(
 )
 
 staticryptR::staticryptr(
-  files = "_output/about.html",
+  files = "docs/about.html",
   directory = ".",
   password = "yourverylongpassword",
   short = TRUE,

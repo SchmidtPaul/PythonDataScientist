@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: "./_output"
+  output-dir: "./docs"
   post-render: encrypt.r
 
 website:
