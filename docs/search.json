@@ -1,16 +1,98 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "PythonDataScientist",
+    "objectID": "kap/about.html",
+    "href": "kap/about.html",
+    "title": "Kapitel About",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "About this site",
+    "crumbs": [
+      "Kapitel",
+      "1 Einführung",
+      "1.1 Python"
+    ]
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data Science mit Python",
     "section": "",
-    "text": "About this site"
+    "text": "Dieser Kurs ist gewissermaßen ein zweiter Teil, da er zu großen Teilen das Wissen aus dem Kurs “Data Analytics mit Python” voraussetzt."
+  },
+  {
+    "objectID": "kap/010index.html",
+    "href": "kap/010index.html",
+    "title": "Willkommen!",
+    "section": "",
+    "text": "Hier beginnt der Inhalt des Online-Kurses. Wenn du diesen Text sehen kannst, hast du dich erfolgreich eingeloggt. Es wird nun kurz erklärt wie du diese Seite nutzen kannst.\nSämtliche Inhalte sind nach Kapiteln sortiert. Du kannst die Kapitel durch Klicken auf den jeweiligen Titel links in der Sidebar nacheinander öffnen, oder aber am Ende jeder Seite ganz unten auf den Namen des nächsten Kapitels klicken. So siehst du am Ende dieser Seite ein Python , da das nächste Kapitel “Python” heißt.",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
+  },
+  {
+    "objectID": "kap/010index.html#text-code",
+    "href": "kap/010index.html#text-code",
+    "title": "Willkommen!",
+    "section": "Text & Code",
+    "text": "Text & Code\nDer Hauptteil des Kapitels besteht aus Text und Code. In den ersten Kapiteln ist es vor allem Text, später wird der Anteil an Code zunehmen.\nDer Code ist in Code-Blöcken (grau) eingebettet, während das Ergebnis des Codes direkt unter dem Code-Block angezeigt wird (grün). Hier ein Beispiel:\n\n1+2\n\n3\n\n\nDieser Code wurde auch tatsächlich ausgeführt und zeigt das tatsächliche Ergebnis1, sodass es auch immer reproduzierbar sein sollte. Der Code kann demnach kopiert und in einer Python-Umgebung ausgeführt werden. Anstatt den Code mit der Maus zu markieren und dann zu kopieren, kann auch auf das Clipboard Symbol () in der oberen rechten Ecke des Code-Blocks geklickt werden.\nDer Text erklärt den Code und die Ergebnisse. An einigen Stellen sind weiterführende Quellen als Hyperlinks eingefügt - hier erscheint der Text grün und kann angeklickt werden.",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
+  },
+  {
+    "objectID": "kap/010index.html#weitere-ressourcen",
+    "href": "kap/010index.html#weitere-ressourcen",
+    "title": "Willkommen!",
+    "section": "Weitere Ressourcen",
+    "text": "Weitere Ressourcen\nAm Ende eines Kapitels gibt es ggf. eine Box mit weiterführenden Ressourcen. Diese können Bücher, Artikel, Videos, Kurse oder auch Webseiten sein. Die Ressourcen sind immer spezifisch auf das jeweilige Kapitel zugeschnitten und sollen helfen, das Gelernte zu vertiefen. Diese weiterführenden Ressourcen sind nicht optional, sondern sollen auch tatsächlich alle genutzt werden, um den größtmöglichen Lernerfolg zu erzielen. Falls doch mal etwas nur optional ist, ist dies explizit vermerkt.\n\n\n\n\n\n\nWeitere Ressourcen\n\n\n\nDies ist ein Beispiel für solch eine Box mit weiterführenden Ressourcen.",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
+  },
+  {
+    "objectID": "kap/010index.html#übungen",
+    "href": "kap/010index.html#übungen",
+    "title": "Willkommen!",
+    "section": "Übungen",
+    "text": "Übungen\nEbenfalls am Ende eines Kapitels gibt es ggf. auch Übungen. Diese sollen helfen, das Gelernte zu festigen und zu überprüfen. Die Übungen sind ebenfalls spezifisch auf das jeweilige Kapitel zugeschnitten. Diese Übungen werden nicht kontrolliert, sondern dienen nur deinem eigenen Lernfortschritt. Es ist aber angedacht, dass alle Übungen ernsthaft durchgeführt werden, um den größtmöglichen Lernerfolg zu erzielen. Die Abschlussprüfung dieses Kurses wird den Übungen sehr ähnlich sein.\nHier ein Beispiel:\n\nDas Python Logo sieht aus wie eine\n\n Schüssel Reis Schlange",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
+  },
+  {
+    "objectID": "kap/010index.html#inhalt",
+    "href": "kap/010index.html#inhalt",
+    "title": "Willkommen!",
+    "section": "Inhalt",
+    "text": "Inhalt\nDer Kurs ist so angelegt, dass man sich über ca. 15 Wochen hinweg selbstständig durch den gesamten Inhalt arbeitet. Dabei ist angedacht, dass man pro Woche bis zu 6h aufwendet. Unter dem Titel jedes Kapitels ist vermerkt in welcher Woche das Material planmäßig abzuarbeiten ist. Die Übungen und weiterführenden Ressourcen sollen dabei Inspiration sein, um das Gelernte zu vertiefen und zu festigen. Es ist aber natürlich noch förderlicher, wenn darüber hinaus eigene Ideen ausprobiert und umgesetzt werden.\nInhaltlich lässt sich der rote Faden des Kurses wie folgt zusammenfassen:\n\nEinführung in Python, Data Analytics. Installation von Python.\nGrundlagen für die Nutzung von Python und Jupyter Notebooks\nGrundlagen Datenverarbeitung und -auswertung mit Numpy & Pandas\nGrundlagen Datenvisualiserung mit Matplotlib & Seaborn\n\nwobei verschiedenste relevante Themen behandelt und Beispieldaten ausgewertet werden. Es werden auch immer wieder Best Practice Empfehlungen und Tipps gegeben, die teilweise Python-spezifisch, aber auch Python-unabhängig für Datenanalysten relevant sind.\nDas Ziel ist, dass am Ende des Kurses die Teilnehmer und Teilnehmerinnen ein Gefühl dafür haben was Data Analytics ist und wie Python dafür genutzt werden kann. Es soll die Angst vor der Programmierung, aber auch vor der Statistik genommen werden und eine gute Basis für weiterführende Kurse oder Projekte gelegt werden.",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
+  },
+  {
+    "objectID": "kap/010index.html#aufgaben-abschlussprojekt",
+    "href": "kap/010index.html#aufgaben-abschlussprojekt",
+    "title": "Willkommen!",
+    "section": "Aufgaben & Abschlussprojekt",
+    "text": "Aufgaben & Abschlussprojekt\nDer Kurs ist wie gesagt so angelegt, dass man weitestgehend flexibel selbstständig arbeiten kann. Nichtsdestotrotz gibt es im Verlauf des Kurses Aufgabe I, Aufgabe II und das Abschlussprojekt, die etwa nach einem Drittel, zwei Dritteln und am Ende des Kurses eingereicht werden müssen und kontrolliert werden. Mehr Informationen dazu finden sich dann in den entsprechenden Kapiteln.",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
+  },
+  {
+    "objectID": "kap/010index.html#footnotes",
+    "href": "kap/010index.html#footnotes",
+    "title": "Willkommen!",
+    "section": "Fußnoten",
+    "text": "Fußnoten\n\n\nDas ist möglich, weil diese Seite mit Quarto erstellt wurde, einem speziellen Markdown-Format, das auch die Ausführung von Code ermöglicht.↩︎",
+    "crumbs": [
+      "Kapitel",
+      "Überischt"
+    ]
   }
 ]

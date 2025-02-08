@@ -1,9 +1,22 @@
 ---
-title: "PythonDataScientist"
+title: "Data Science mit Python"
+subtitle: "TODO TODO Mit Python und den Grundprinzipien der Datenanalyse, durch effektive Datenexploration und -visualisierung, klare und überzeugende Einsichten entdecken."
+author:
+- name:
+    given: Paul
+    family: Schmidt
+    literal: Paul Schmidt
+  affiliations:
+  - name: BioMath GmbH
+    city: Hamburg
+    country: Germany
+    url: https://www.biomath.de/
+date: ""
+page-layout: full
+citation: false
+code-tools: false
+sidebar: false
+toc: false
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-
+Dieser Kurs ist gewissermaßen ein zweiter Teil, da er zu großen Teilen das Wissen aus dem Kurs "Data Analytics mit Python" voraussetzt.

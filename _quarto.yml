@@ -1,24 +1,96 @@
 project:
   type: website
-  output-dir: "./docs"
+  output-dir: docs
   post-render: encrypt.r
 
 website:
-  title: "PythonDataScientist"
+  title: Data Science mit Python
+  page-navigation: true
   navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - href: about.qmd
-        text: About
+    pinned: true
+    right:
+    - text: Kapitel
+      file: kap/010index.qmd
+  sidebar:
+  - title: Die Kapitel
+    style: docked
+    search: false
+    background: $bm-grey
+    contents:
+    - text: Überischt
+      file: kap/010index.qmd
+    - section: '1 Einführung'
+      contents:
+      - text: '1.1 Python'
+        file: kap/about.qmd
+
+  page-footer:
+    left: |
+      Inhalt {{< fa brands creative-commons >}} 
+      2024 von [{{< var instructor.name >}}]({{< var instructor.url >}}), 
+      [{{< var company.name >}}]({{< var company.url >}})<br>
+      Alle Inhalte sind lizenziert als {{< fa brands creative-commons >}}
+      {{< fa brands creative-commons-by >}} {{< fa brands creative-commons-nc >}}
+      [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
+    right: |
+      Erstellt mit [{{< fa brands python >}}](https://www.python.org/), 
+      [{{< fa brands r-project >}}](https://www.r-project.org/), 
+      und [Quarto](https://quarto.org/).
+    border: false
+    background: $bm-green
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
+    anchor-sections: true
+    code-fold: false
+    code-summary: Code zeigen/verstecken
+    code-overflow: scroll
+    code-copy: true
+    code-link: true
+    code-tools: true
+    citations-hover: true
+    footnotes-hover: true
     toc: true
+    css:
+    - include/styles.css
+    - include/webex.css
+    theme: 
+    - include/theme.scss
+    # include-before-body:
+    # - include/header.html
+    include-after-body: 
+    - include/webex.js
+  # pdf:
+  #   toc: true
+  #   toc-depth: 2
+  #   include-in-header:
+  #     text: |
+  #       \usepackage{fancyhdr}
+  #       \pagestyle{fancy}
+  #       \fancyhead{}
+  #       \fancyfoot{}
+  #       \fancyhead[LE,RO]{\thepage}
+  #       \fancyhead[RE,LO]{Data Analytics mit Python}
+  #   documentclass: article
+  #   fontsize: 11pt
+  #   geometry: margin=1in
+  #   number-sections: true
+  #   keep-md: true
+  #   latex-engine: pdflatex
+
+lang: de
+author-title: Material
+abstract-title: Zusammenfassung
+date: last-modified
+published-title: Zuletzt aktualisiert
+execute:
+  warning: false
+  message: false
+  freeze: auto
+fig-dpi: 300
+fig-width: 5.5
+fig-height: 3.5
+citation: false
 
 
 

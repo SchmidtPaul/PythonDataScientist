@@ -1,5 +1,5 @@
 password <- "pw"
-html_files <- list.files("docs", pattern = "\\.html$", full.names = TRUE)
+html_files <- list.files("docs", pattern = "\\.html$", full.names = TRUE, recursive = TRUE)
 
 for (file in html_files) {
   staticryptR::staticryptr(
@@ -14,10 +14,9 @@ for (file in html_files) {
     template_error = "Falsches Passwort",
     template_placeholder = "Passwort",
     template_remember = "Passwort merken",
-    template_title = "Data Scientist - Focus Python",
-    template_toggle_hide = "template_toggle_hide",
-    template_toggle_show = "template_toggle_show"
-    
+    template_title = "Data Scientist - Focus Python"
+    # template_toggle_hide = "template_toggle_hide",
+    # template_toggle_show = "template_toggle_show"
   )
   
   cat(glue::glue("\n\n> Encrypted '{file}'"))
