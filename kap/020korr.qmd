@@ -1,0 +1,354 @@
+---
+title: "Korrelation"
+knitr:
+  opts_chunk: 
+    results: hold
+---
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import scipy.stats as stats
+```
+
+```{python}
+#| echo: false
+# Für konsistente Abbildungen
+np.random.seed(42)
+plt.style.use('seaborn-v0_8-whitegrid')
+```
+
+# Korrelation
+
+## Einführung
+
+Fast jeder hat eine intuitive Vorstellung davon, was eine Korrelation ist: Zwei Dinge hängen irgendwie zusammen oder bewegen sich gemeinsam. Der Begriff "Korrelation" wird im Alltag oft verwendet, manchmal jedoch unpräzise. Als Data Scientists müssen wir ein klares Verständnis davon haben, was Korrelation statistisch bedeutet, wie sie berechnet wird und - besonders wichtig - was sie uns nicht sagt.
+
+In diesem Kapitel werden wir zunächst den klassischen Pearson-Korrelationskoeffizienten betrachten und sehen, wie wir ihn in Python berechnen können. Wir werden auch die statistische Signifikanz von Korrelationen untersuchen und alternative Korrelationsmaße wie die Spearman-Rangkorrelation kennenlernen. Schließlich werden wir uns damit beschäftigen, wie man Korrelationsmatrizen erstellt und visualisiert, was ein wichtiges Werkzeug in der explorativen Datenanalyse ist.
+
+## Grundkonzepte der Korrelation
+
+Ein quantitatives Maß für den Zusammenhang zwischen zwei Variablen ist der **Korrelationskoeffizient**. Wenn von Korrelation ($\rho$ oder $r$) in der Statistik die Rede ist, bezieht man sich meistens auf den [Pearson-Korrelationskoeffizienten](https://www.wikiwand.com/de/Korrelationskoeffizient), der ein Maß für den linearen Zusammenhang zwischen zwei numerischen Variablen darstellt.
+
+Der Korrelationskoeffizient kann nur Werte zwischen -1 und 1 annehmen:
+
+- $r = 1$: Perfekte positive Korrelation
+- $r = 0$: Keine Korrelation
+- $r = -1$: Perfekte negative Korrelation
+
+Je weiter der Koeffizient von 0 entfernt ist, desto stärker ist der Zusammenhang. 
+
+Vereinfacht ausgedrückt bedeutet eine positive Korrelation: *"Wenn eine Variable größer wird, wird die andere tendenziell auch größer"*. Eine negative Korrelation bedeutet: *"Wenn eine Variable größer wird, wird die andere tendenziell kleiner"*.
+
+Wichtig zu verstehen ist, dass die Reihenfolge der beiden Variablen keine Rolle spielt. Die Korrelation zwischen X und Y ist dieselbe wie die Korrelation zwischen Y und X. Eine Korrelation ist also kein Modell und kann nicht für Vorhersagen verwendet werden.
+
+### Formel des Pearson-Korrelationskoeffizienten
+
+Die Formel für den Pearson-Korrelationskoeffizienten ist:
+
+$$r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_i - \bar{x})^2 \sum_{i=1}^{n} (y_i - \bar{y})^2}}$$
+
+Wobei $\bar{x}$ und $\bar{y}$ die Mittelwerte der Variablen $x$ und $y$ sind.
+
+Eine alternative, intuitivere Formulierung ist, dass der Pearson-Korrelationskoeffizient die Kovarianz der beiden Variablen geteilt durch das Produkt ihrer Standardabweichungen ist:
+
+$$r = \frac{cov(X,Y)}{\sigma_X \sigma_Y}$$
+
+### Korrelation ≠ Kausalität
+
+Ein kritisch wichtiger Grundsatz in der Statistik lautet: [*"Korrelation impliziert nicht Kausalität"*](https://www.wikiwand.com/de/Cum_hoc_ergo_propter_hoc). Nur weil zwei Variablen korreliert sind, bedeutet das nicht, dass eine die andere verursacht. Es könnte sein, dass:
+
+1. A verursacht B
+2. B verursacht A
+3. Ein dritter Faktor C verursacht sowohl A als auch B
+4. Die Korrelation ist rein zufällig
+
+Die Website [Spurious Correlations](https://www.tylervigen.com/spurious-correlations) zeigt humorvolle Beispiele von starken Korrelationen zwischen völlig unzusammenhängenden Dingen, wie zum Beispiel die Anzahl der Menschen, die in Schwimmbädern ertrunken sind, und die Anzahl der Filme, in denen Nicolas Cage mitgespielt hat.
+
+## Berechnung der Korrelation in Python
+
+In Python gibt es mehrere Möglichkeiten, Korrelationen zu berechnen. Wir stellen hier die gängigsten Methoden mit NumPy, Pandas und SciPy vor.
+
+Zunächst erzeugen wir einige Beispieldaten, um die verschiedenen Methoden zu demonstrieren:
+
+```{python}
+# Erzeugen korrelierter Daten
+n = 100
+x = np.random.normal(0, 1, n)
+y_strong_pos = x + np.random.normal(0, 0.5, n)  # Starke positive Korrelation
+y_weak_pos = x + np.random.normal(0, 2, n)      # Schwache positive Korrelation
+y_strong_neg = -x + np.random.normal(0, 0.5, n) # Starke negative Korrelation
+y_no_corr = np.random.normal(0, 1, n)           # Keine Korrelation
+
+# In DataFrame speichern
+df = pd.DataFrame({
+    'X': x,
+    'Y_strong_pos': y_strong_pos,
+    'Y_weak_pos': y_weak_pos,
+    'Y_strong_neg': y_strong_neg,
+    'Y_no_corr': y_no_corr
+})
+
+# Streudiagramme als visuelle Referenz
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+axes[0, 0].scatter(x, y_strong_pos)
+axes[0, 0].set_title('Starke positive Korrelation')
+axes[0, 0].set_xlabel('X')
+axes[0, 0].set_ylabel('Y')
+
+axes[0, 1].scatter(x, y_weak_pos)
+axes[0, 1].set_title('Schwache positive Korrelation')
+axes[0, 1].set_xlabel('X')
+axes[0, 1].set_ylabel('Y')
+
+axes[1, 0].scatter(x, y_strong_neg)
+axes[1, 0].set_title('Starke negative Korrelation')
+axes[1, 0].set_xlabel('X')
+axes[1, 0].set_ylabel('Y')
+
+axes[1, 1].scatter(x, y_no_corr)
+axes[1, 1].set_title('Keine Korrelation')
+axes[1, 1].set_xlabel('X')
+axes[1, 1].set_ylabel('Y')
+
+plt.tight_layout()
+plt.show()
+```
+
+### Mit NumPy
+
+NumPy bietet die Funktion `np.corrcoef()`, die eine Korrelationsmatrix für die übergebenen Variablen berechnet:
+
+```{python}
+# NumPy-Methode
+corr_strong_pos = np.corrcoef(x, y_strong_pos)[0, 1]
+corr_weak_pos = np.corrcoef(x, y_weak_pos)[0, 1]
+corr_strong_neg = np.corrcoef(x, y_strong_neg)[0, 1]
+corr_no_corr = np.corrcoef(x, y_no_corr)[0, 1]
+
+print(f"Starke positive Korrelation: {corr_strong_pos:.4f}")
+print(f"Schwache positive Korrelation: {corr_weak_pos:.4f}")
+print(f"Starke negative Korrelation: {corr_strong_neg:.4f}")
+print(f"Keine Korrelation: {corr_no_corr:.4f}")
+```
+
+Die Funktion `np.corrcoef()` gibt eine Matrix zurück, wobei der Wert an Position `[0, 1]` (oder `[1, 0]`) der Korrelationskoeffizient zwischen den beiden übergebenen Variablen ist.
+
+### Mit Pandas
+
+Pandas bietet eine `.corr()`-Methode, die auf einer Series oder einem DataFrame angewendet werden kann:
+
+```{python}
+# Pandas-Methode für einzelne Spalten
+corr_strong_pos_pd = df['X'].corr(df['Y_strong_pos'])
+corr_weak_pos_pd = df['X'].corr(df['Y_weak_pos'])
+corr_strong_neg_pd = df['X'].corr(df['Y_strong_neg'])
+corr_no_corr_pd = df['X'].corr(df['Y_no_corr'])
+
+print(f"Starke positive Korrelation: {corr_strong_pos_pd:.4f}")
+print(f"Schwache positive Korrelation: {corr_weak_pos_pd:.4f}")
+print(f"Starke negative Korrelation: {corr_strong_neg_pd:.4f}")
+print(f"Keine Korrelation: {corr_no_corr_pd:.4f}")
+```
+
+### Mit SciPy
+
+SciPy bietet neben dem Korrelationskoeffizienten auch einen p-Wert, der angibt, ob die Korrelation statistisch signifikant ist:
+
+```{python}
+# SciPy-Methode
+corr_strong_pos_sp, p_strong_pos = stats.pearsonr(x, y_strong_pos)
+corr_weak_pos_sp, p_weak_pos = stats.pearsonr(x, y_weak_pos)
+corr_strong_neg_sp, p_strong_neg = stats.pearsonr(x, y_strong_neg)
+corr_no_corr_sp, p_no_corr = stats.pearsonr(x, y_no_corr)
+
+print(f"Starke positive Korrelation: r={corr_strong_pos_sp:.4f}, p={p_strong_pos:.4e}")
+print(f"Schwache positive Korrelation: r={corr_weak_pos_sp:.4f}, p={p_weak_pos:.4e}")
+print(f"Starke negative Korrelation: r={corr_strong_neg_sp:.4f}, p={p_strong_neg:.4e}")
+print(f"Keine Korrelation: r={corr_no_corr_sp:.4f}, p={p_no_corr:.4f}")
+```
+
+## Signifikanztests für Korrelationen
+
+In vielen Fällen möchten wir wissen, ob eine beobachtete Korrelation statistisch signifikant ist, oder ob sie auch zufällig hätte entstehen können.
+
+Die Nullhypothese ($H_0$) für einen Korrelationstest lautet: "Die Korrelation in der Grundgesamtheit ist gleich 0." Die Alternativhypothese ($H_1$) ist entsprechend: "Die Korrelation in der Grundgesamtheit ist nicht gleich 0."
+
+Wie wir oben gesehen haben, gibt uns die Funktion `stats.pearsonr()` neben dem Korrelationskoeffizienten auch einen p-Wert zurück. Dieser p-Wert gibt die Wahrscheinlichkeit an, einen Korrelationskoeffizienten zu beobachten, der mindestens so extrem ist wie der berechnete, wenn in der Grundgesamtheit tatsächlich keine Korrelation vorliegt.
+
+Wenn der p-Wert unter dem gewählten Signifikanzniveau (üblicherweise $\alpha = 0.05$) liegt, können wir die Nullhypothese verwerfen und sagen, dass die Korrelation statistisch signifikant ist.
+
+### Interpretation der p-Werte in unserem Beispiel
+
+Im obigen Beispiel können wir sehen, dass:
+
+- Für die starke positive Korrelation ist der p-Wert sehr klein (wissenschaftliche Notation mit e-xx), was bedeutet, dass die Korrelation hochsignifikant ist.
+- Für die schwache positive Korrelation ist der p-Wert ebenfalls sehr klein, was bedeutet, dass auch diese Korrelation signifikant ist.
+- Für die starke negative Korrelation ist der p-Wert sehr klein, was bedeutet, dass die Korrelation hochsignifikant ist.
+- Für die "keine Korrelation"-Daten ist der p-Wert hoch (0.52), was bedeutet, dass wir die Nullhypothese nicht verwerfen können. Die nahe bei 0 liegende Korrelation könnte gut durch Zufall entstanden sein.
+
+Es ist wichtig zu beachten, dass statistische Signifikanz nicht gleichbedeutend mit praktischer Relevanz ist. Eine sehr schwache Korrelation kann bei großen Stichproben statistisch signifikant sein, aber praktisch bedeutungslos.
+
+## Alternative Korrelationsmethoden
+
+Der Pearson-Korrelationskoeffizient ist nicht immer die beste Wahl. Er setzt voraus, dass:
+
+1. Die Beziehung zwischen den Variablen linear ist
+2. Die Variablen kontinuierlich und normalverteilt sind
+3. Die Daten keine bedeutenden Ausreißer enthalten
+
+Wenn diese Voraussetzungen nicht erfüllt sind, können alternative Korrelationsmethoden besser geeignet sein.
+
+### Spearman-Rangkorrelation
+
+Die [Spearman-Rangkorrelation](https://www.wikiwand.com/de/Rangkorrelationskoeffizient) ($\rho$ oder $r_s$) ist eine nicht-parametrische Version der Pearson-Korrelation, die auf Rängen statt auf den tatsächlichen Werten basiert. Sie ist daher weniger anfällig für Ausreißer und kann auch monotone, nicht-lineare Beziehungen erfassen.
+
+Die Spearman-Korrelation sollte verwendet werden, wenn:
+
+- Die Beziehung zwischen den Variablen monoton, aber nicht linear ist
+- Die Daten ordinalskaliert sind
+- Die Daten Ausreißer enthalten
+- Die Daten nicht normalverteilt sind
+
+```{python}
+# Erzeugen von Daten für eine nicht-lineare Beziehung
+x_nonlinear = np.random.uniform(0, 10, 100)
+y_nonlinear = x_nonlinear**2 + np.random.normal(0, 10, 100)
+
+# Berechnung der Pearson- und Spearman-Korrelation
+pearson_corr, _ = stats.pearsonr(x_nonlinear, y_nonlinear)
+spearman_corr, _ = stats.spearmanr(x_nonlinear, y_nonlinear)
+
+# Visualisierung
+plt.figure(figsize=(8, 6))
+plt.scatter(x_nonlinear, y_nonlinear)
+plt.title(f'Nicht-lineare Beziehung\nPearson r: {pearson_corr:.4f}, Spearman ρ: {spearman_corr:.4f}')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.grid(True)
+plt.show()
+```
+
+In diesem Beispiel sehen wir, dass die Spearman-Korrelation die monotone, nicht-lineare Beziehung besser erfasst als die Pearson-Korrelation.
+
+Wir können die Spearman-Korrelation mit der Funktion `stats.spearmanr()` oder mit der Pandas-Methode `.corr(method='spearman')` berechnen:
+
+```{python}
+# Mit SciPy
+spearman_corr_scipy, p_val = stats.spearmanr(x_nonlinear, y_nonlinear)
+print(f"Spearman-Korrelation (SciPy): {spearman_corr_scipy:.4f}, p-Wert: {p_val:.4e}")
+
+# Mit Pandas
+df_nonlinear = pd.DataFrame({'X': x_nonlinear, 'Y': y_nonlinear})
+spearman_corr_pandas = df_nonlinear['X'].corr(df_nonlinear['Y'], method='spearman')
+print(f"Spearman-Korrelation (Pandas): {spearman_corr_pandas:.4f}")
+```
+
+### Weitere Korrelationsmethoden
+
+Neben Pearson und Spearman gibt es noch weitere Korrelationsmethoden für spezielle Anwendungsfälle:
+
+- **Kendall's Tau** (`stats.kendalltau()`): Eine weitere nicht-parametrische Korrelation, die auf Konkordanz und Diskordanz basiert. Sie ist robuster bei kleinen Stichproben und effizienter als Spearman, wenn die Daten viele Bindungen aufweisen.
+
+- **Point-Biserial Korrelation** (`stats.pointbiserialr()`): Für den Fall, dass eine Variable binär (0/1) und die andere kontinuierlich ist.
+
+- **Phi-Koeffizient** (`stats.contingency.association()`): Für den Fall, dass beide Variablen binär sind.
+
+- **Polyserielle Korrelation**: Für den Fall, dass eine Variable ordinalskaliert und die andere kontinuierlich ist.
+
+Die Wahl der geeigneten Korrelationsmethode hängt von der Art und Verteilung der Daten sowie von der Fragestellung ab.
+
+## Korrelationsmatrizen
+
+In der Praxis haben wir es oft mit mehreren Variablen zu tun und möchten alle paarweisen Korrelationen auf einmal berechnen. Dafür sind Korrelationsmatrizen ideal.
+
+Eine Korrelationsmatrix ist eine quadratische Matrix, die die Korrelationskoeffizienten zwischen allen Paaren von Variablen enthält. Die Diagonale enthält immer den Wert 1, da jede Variable perfekt mit sich selbst korreliert ist.
+
+Pandas macht es sehr einfach, eine Korrelationsmatrix zu berechnen:
+
+```{python}
+# Erstellen eines DataFrames mit mehreren Variablen
+df_multi = pd.DataFrame({
+    'A': np.random.normal(0, 1, 100),
+    'B': np.random.normal(0, 1, 100),
+    'C': np.random.normal(0, 1, 100)
+})
+
+# Korrelationen zwischen den Variablen hinzufügen
+df_multi['D'] = df_multi['A'] + np.random.normal(0, 0.5, 100)  # Korreliert mit A
+df_multi['E'] = -df_multi['B'] + np.random.normal(0, 0.5, 100) # Negativ korreliert mit B
+df_multi['F'] = df_multi['C'] * 2 + np.random.normal(0, 1, 100) # Korreliert mit C
+
+# Berechnung der Korrelationsmatrix
+correlation_matrix = df_multi.corr()
+print(correlation_matrix)
+```
+
+### Visualisierung von Korrelationsmatrizen
+
+Eine Korrelationsmatrix lässt sich am besten visuell als Heatmap darstellen. Seaborn bietet hierfür die Funktion `heatmap()`:
+
+```{python}
+# Erstellen einer Heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1, center=0)
+plt.title('Korrelationsmatrix')
+plt.tight_layout()
+plt.show()
+```
+
+In dieser Heatmap:
+- Dunkelblaue Felder repräsentieren starke negative Korrelationen
+- Dunkelrote Felder repräsentieren starke positive Korrelationen
+- Weiße Felder repräsentieren keine Korrelation
+- Die Zahlen in den Feldern sind die genauen Korrelationskoeffizienten
+
+Für größere Datensätze können wir die Darstellung weiter optimieren, indem wir etwa die Genauigkeit der angezeigten Werte reduzieren:
+
+```{python}
+# Generieren eines größeren Datensatzes
+np.random.seed(42)
+n_variables = 10
+df_large = pd.DataFrame(np.random.randn(100, n_variables), 
+                        columns=[f'Var_{i}' for i in range(1, n_variables+1)])
+
+# Einige Korrelationen hinzufügen
+for i in range(1, n_variables, 2):
+    df_large[f'Var_{i+1}'] = df_large[f'Var_{i}'] + np.random.normal(0, 0.5, 100)
+
+# Korrelationsmatrix berechnen
+corr_large = df_large.corr()
+
+# Verbesserte Heatmap
+plt.figure(figsize=(12, 10))
+mask = np.triu(np.ones_like(corr_large, dtype=bool))  # Obere Dreiecksmatrix ausblenden (da redundant)
+sns.heatmap(corr_large, mask=mask, annot=True, fmt='.2f', cmap='coolwarm', 
+            vmin=-1, vmax=1, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .7})
+plt.title('Korrelationsmatrix (verbesserte Darstellung)')
+plt.tight_layout()
+plt.show()
+```
+
+Bei der Analyse von Korrelationsmatrizen sollten Sie auf Folgendes achten:
+
+1. **Starke Korrelationen**: Suchen Sie nach sehr positiven oder negativen Korrelationen, die auf wichtige Beziehungen hinweisen könnten.
+2. **Multikollinearität**: Mehrere stark korrelierte Variablen können Probleme in Regressionsmodellen verursachen.
+3. **Muster**: Formen Sie die Korrelationsmatrix anhand von Clustern oder Gruppierungen von Variablen?
+
+Beachten Sie, dass bei großen Korrelationsmatrizen die Frage des multiplen Testens berücksichtigt werden sollte. Wenn Sie viele Korrelationen gleichzeitig berechnen, steigt die Wahrscheinlichkeit, zufällig "signifikante" Ergebnisse zu erhalten.
+
+## Zusammenfassung
+
+In diesem Kapitel haben wir die Grundlagen der Korrelationsanalyse kennengelernt:
+
+- Der Pearson-Korrelationskoeffizient misst den linearen Zusammenhang zwischen zwei Variablen und nimmt Werte zwischen -1 und 1 an.
+- Korrelation bedeutet nicht Kausalität – ein wichtiger Grundsatz, den wir nie vergessen sollten.
+- Python bietet mehrere Möglichkeiten zur Berechnung von Korrelationen: mit NumPy, Pandas und SciPy.
+- Statistische Signifikanztests für Korrelationen helfen uns zu entscheiden, ob eine beobachtete Korrelation auch auf Zufall zurückzuführen sein könnte.
+- Alternative Korrelationsmethoden wie die Spearman-Rangkorrelation sind besser geeignet für nicht-lineare Beziehungen oder bei Verletzung der Voraussetzungen des Pearson-Koeffizienten.
+- Korrelationsmatrizen und deren Visualisierung als Heatmaps sind wertvolle Werkzeuge, um Beziehungen zwischen mehreren Variablen gleichzeitig zu untersuchen.
+
+Im nächsten Kapitel werden wir uns mit Regressionsanalysen beschäftigen, die auf den Konzepten der Korrelation aufbauen, aber einen Schritt weitergehen, indem sie auch Vorhersagemodelle erstellen.

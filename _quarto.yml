@@ -21,13 +21,13 @@ website:
       file: kap/010index.qmd
     - section: '1 Einführung'
       contents:
-      - text: '1.1 Python'
-        file: kap/about.qmd
+      - text: '2.1 Correlation'
+        file: kap/020korr.qmd
 
   page-footer:
     left: |
       Inhalt {{< fa brands creative-commons >}} 
-      2024 von [{{< var instructor.name >}}]({{< var instructor.url >}}), 
+      2025 von [{{< var instructor.name >}}]({{< var instructor.url >}}), 
       [{{< var company.name >}}]({{< var company.url >}})<br>
       Alle Inhalte sind lizenziert als {{< fa brands creative-commons >}}
       {{< fa brands creative-commons-by >}} {{< fa brands creative-commons-nc >}}

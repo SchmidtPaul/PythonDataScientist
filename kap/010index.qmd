@@ -20,6 +20,14 @@ date: ""
 
 Hier beginnt der Inhalt des Online-Kurses. Wenn du diesen Text sehen kannst, hast du dich erfolgreich eingeloggt. Es wird nun kurz erklärt wie du diese Seite nutzen kannst.
 
+::: callout-caution
+## Verweis Data Analyst Workshop
+
+Wenn du bereits am **Vorgängerkurs "Data Analytics mit Python"** teilgenommen hast und demnach [dessen Online-Material](https://dataanalyticsmitpython.netlify.app/) kennst, dann wird dir das alles bekannt vorkommen.
+
+Generell werden orange Blöcke wie dieser immer dann auftauchen, wenn direkt auf beispielsweise einem bestimmten Kapitel aus dem genannten Data Analyst Kurs verwiesen wird. 
+:::
+
 Sämtliche Inhalte sind nach Kapiteln sortiert. Du kannst die Kapitel durch Klicken auf den jeweiligen Titel links in der Sidebar nacheinander öffnen, oder aber am Ende jeder Seite ganz unten auf den Namen des nächsten Kapitels klicken. So siehst du am Ende dieser Seite ein **Python** {{< fa solid "arrow-right" >}}, da das nächste Kapitel "Python" heißt.
 
 # Aufbau der Kapitel

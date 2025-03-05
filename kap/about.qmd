@@ -1,5 +1,0 @@
----
-title: "Kapitel About"
----
-
-About this site
