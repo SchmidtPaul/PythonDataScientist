@@ -1,0 +1,346 @@
+---
+title: "Eigene Funktionen"
+---
+
+Pythons vordefinierte Funktionen und importierte Funktionen aus `numpy` und `pandas` haben wir ja bereits kennengelernt.
+Es ist aber auch möglich sich selbst neue Funktionen zu definieren. Der Hauptgrund dafür ist eins der bekanntesten Prinzipien
+der Programmierung: 
+
+**Don't Repeat Yourself** – Wiederhole dich nicht
+
+Funktionen ermöglichen die Erstellung von übersichtlichen, wartbaren und wiederverwendbaren Programmen.
+
+## Syntax
+
+Für die Definition einer Funktion muss der Funktionsname und die Funktionsparameter ("Argumente") vorgegeben werden. Die grundlegende Syntax dafür sieht so aus: 
+
+```{python}
+def gruess(name):
+    print("Hallo " + name + "!")
+
+# Funktionsaufrufe
+gruess("Paul")
+gruess("Mila")
+gruess("Kerstin")
+```
+
+Das Argument `name` ist in der Funktion also eine Variable, die mit dem Wert, den wir im Funktionsaufruf übergeben, definiert wird. Wie bei Schleifen und anderen logischen Blöcken wird der Kontext der Funktion über die Einrückung definiert.
+Wir sparen es uns also, jedes mal die String-Verkettung und den `print`-Befehl auszuschreiben, und man kann direkt im Code erkennen, dass drei Personen beim Namen gegrüßt werden sollen.
+Bei diesem einfachen Beispiel ist der Vorteil zwar noch gering, aber sobald komplexere Funktionen definiert werden und gar andere Personen das Programm lesen und ändern sollen, werden sie bald unerlässlich.
+
+Wir könnten die Funktion zum Beispiel so erweitern, dass sie in mehreren Sprachen grüßen kann, welche durch ein weiteres Argument definiert werden:
+
+```{python}
+def localized_greeting(name, language):
+    if language == 'de':
+        print("Hallo " + name + "!")
+    elif language == 'en':
+        print("Hello " + name + "!")
+    elif language == 'fr':
+        print("Bonjour " + name + "!")
+    elif language == 'es':
+        print("¡Hola " + name + "!")
+    else:
+        print("👋 " + name)
+
+localized_greeting("Paul", "fr")
+localized_greeting("Mila", "es")
+localized_greeting("Kerstin", "jp")
+
+```
+
+
+:::{.callout-note title="Namenskonventionen"}
+Um das Lesen von Python-Code zu vereinfachen, hat sich die Python-Community auf einige Konventionen für die Benennung von verschiedenen Dingen geeinigt. Die wichtigsten für uns sind:
+
+- Variablen und Funktionen: im sogenannten **Snake-Case**, also kleingeschrieben und einzelne Wörter mit einem Unterstrich getrennt, z.B. `localized_greeting`
+- Konstanten, also Werte, die sich nicht ändern: in Großbuchstaben, z.B. `PI = 3.14159`
+
+Diese und weitere Richtlinien können in dem [PEP 8 Style guide](https://peps.python.org/pep-0008/) nachgelesen werden.
+:::
+
+#### Standardargumente
+Wir können Argument optional machen, indem wir einen Standardwert vorgeben, den sie einnehmen, wenn kein anderer Wert beim Aufruf spezifiziert wird:
+
+```{python}
+def localized_greeting(name, language = 'de'):
+    if language == 'de':
+        print("Hallo " + name + "!")
+        # etc
+
+localized_greeting("Brigitte")
+```
+
+### Rückgabewerte
+
+Eine weitere Eigenschaft von Funktionen ist das "Zurückgeben" von Werten, welche in der Funktion berechnet wurden. Das wird über das Schlüsselwort `return` erreicht. `return` beendet die Funktion und gibt den nachfolgenden Wert zurück.
+
+```{python}
+PI = 3.14159
+
+def berechne_zylindervolumen(radius, hoehe):
+    grundflaeche = PI * radius ** 2
+    volumen = grundflaeche * hoehe
+    return volumen
+
+r = 5
+h = 20
+vol = berechne_zylindervolumen(r, h)
+print(f"Ein Zylinder mit Radius {r} und Höhe {h} hat ein Volumen von ungefähr {vol}.")
+```
+
+### Scoping
+
+Vielleicht ist euch im Beispiel oben etwas aufgefallen: Warum wird eine neue Variable `vol` definiert, die den Rückgabewert der Funktion enthält, wo doch in der Funktion selbst eine Variable `volumen` definiert wurde? Die Antwort darauf ist der **Scope** (dt. Nutzbarkeitsbereich/Sichtbarkeitsbereich) der Variablen.
+
+Variablen, die in einer Funktion definierten werden, sind *nur* in dieser Funktion verwendbar. Das muss auch so sein, da man sich sonst aus Versehen durch die Verwendung einer Funktion eigene Variablen überschreiben könnte. Das bedeutet also auch, dass man Variablennamen, die in Funktionen verwendet werden, ohne weiteres wiederverwendet werden können.
+
+In Funktionen können jedoch trotzdem Variablen (oder Konstanten) von außerhalb der Funktion verwendet werden, wie hier zum Beispiel `PI`. Eine so verwendete Variable wird *globale Variable* genannt.
+
+:::{.callout-warning title="Vorsicht"}
+Die Verwendung von globalen Variablen sollte in den meisten Fällen vermieden werden. Sie verringern die Lesbarkeit des Codes, da nicht offensichtlich ist, wo die verwendeten Werte in einer Funktion her kommen. Außerdem können globale Variablen modifiziert an verschiedenen Stellen modifiziert werden, was die eventuelle Fehlersuche erschwert.
+:::
+
+```{python}
+PI = 3.14159
+
+def berechne_zylindervolumen(radius, hoehe):
+    grundflaeche = PI * radius ** 2
+    volumen = grundflaeche * hoehe
+    return volumen
+
+r = 5
+h = 20
+vol = berechne_zylindervolumen(r, h)
+# print(volumen) <- Das würde einen Fehler verursachen
+```
+
+
+## Docstrings
+Eine gute Praxis beim Schreiben von Funktionen ist die Verwendung von Docstrings. Ein Docstring ist ein mehrzeiliger String, der direkt unterhalb der Funktionsdefinition steht und die Funktion mit ihren Parametern und Rückgabewerten beschreibt. Dies erleichtert das Verständnis der Funktion für andere Entwickler und für einen selbst, wenn man sich den Code später erneut ansieht.
+
+Ein Docstring wird mit dreifachen Anführungszeichen (""") oder (''') geschrieben und kann mehrere Zeilen umfassen.
+
+Hier ist ein Beispiel, das die `berechne_zylindervolumen`-Funktion mit einem Docstring ergänzt:
+
+```{python}
+PI = 3.14159
+
+def berechne_zylindervolumen(radius, hoehe):
+    """
+    Berechnet das Volumen eines Zylinders.
+    
+    Parameter:
+    radius: Der Radius der Zylinderbasis.
+    hoehe: Die Höhe des Zylinders.
+    
+    Rückgabewert:
+    Das berechnete Volumen des Zylinders.
+    """
+    grundflaeche = PI * radius ** 2
+    volumen = grundflaeche * hoehe
+    return volumen
+
+```
+
+
+Durch die Verwendung eines Docstrings wird klar definiert, welche Parameter die Funktion erwartet und welchen Wert sie zurückgibt. Dies verbessert die Lesbarkeit und Wartbarkeit des Codes erheblich.
+
+Die meisten Entwicklungsumgebungen zeigen euch auch automatisch den Docstring an, wenn ihr die Funktion benutzen wollt.
+
+
+## Typ-Annotationen
+
+Python ist eine dynamisch typisierte Sprache, was bedeutet, dass man nicht angeben muss, welchen Typen (float, int, bool, etc.) eine Variable haben soll. Allerdings helfen Typ-Annotationen dabei, Fehler frühzeitig zu erkennen und den Code verständlicher zu machen. Sie sind vor allem für größere Projekte nützlich.
+
+In Sprachen wie C++ oder Java müssen alle Variablen und Funktionsparameter mit einem Typ versehen werden, da der Compiler sonst das Programm nicht ausführen kann. Python hingegen erlaubt es, ohne feste Typen zu arbeiten – dennoch ist es oft sinnvoll, Typen explizit anzugeben.
+
+Hier ist die `berechne_zylindervolumen`-Funktion mit Typ-Annotationen:
+
+```{python}
+PI: float = 3.14159 # Auch bei der Erstellung einer Variable kann der Typ vorgegeben werden
+
+def berechne_zylindervolumen(radius: float, hoehe: float) -> float:
+    """
+    Berechnet das Volumen eines Zylinders mit Typ-Annotationen.
+    
+    Parameter:
+    radius (float): Der Radius der Zylinderbasis.
+    hoehe (float): Die Höhe des Zylinders.
+    
+    Rückgabewert:
+    float: Das berechnete Volumen des Zylinders.
+    """
+    grundflaeche: float = PI * radius ** 2
+    volumen: float = grundflaeche * hoehe
+    return volumen
+```
+
+Die Syntax ist also `<Variablenname>: <Typ>`, sowohl bei Variablendeklaration als auch bei der Angabe von Funktionsparametern. Mit ` -> <Typ>` Nach der Angabe der Parameter wird vorgegeben, welchen Typ der Rückgabewert der Funktion hat.
+
+
+:::{.callout-note title="Statische Typisierung"}
+In statisch typisierten Sprachen wie C++ oder Java *müssen* die Typen von jeder Variable explizit angegeben werden, da der Compiler diese Information für die Generierung des ausführbaren Maschinencodes benötigt. Das mag zuerst wie ein eindeutiger Nachteil klingen, aber es ermöglicht die Erzeugung von etwas effizienteren Programmen und wirft viele Fehler schon während der Kompilierung auf.
+:::
+
+### Warum Typ-Annotationen hilfreich sind
+
+Obwohl Python weiterhin dynamisch bleibt und die Typen nicht erzwungen werden, helfen sie beim Debuggen und in modernen Entwicklungsumgebungen, indem sie Fehler frühzeitig aufzeigen. So gut wie alle gängigen Python-Pakete sind nahezu vollständig mit Typ-Annotationen versehen.
+
+#### Beispiel: Fehlererkennung durch Typ-Annotationen
+
+```{python}
+import pandas as pd
+import numpy as np
+
+def process_dataframe(df: pd.DataFrame) -> None:
+    """
+    Verarbeitet einen Pandas DataFrame.
+    """
+    print(df.head())
+
+# Hier passiert ein Fehler, da ein numpy Array übergeben wird
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+# process_dataframe(arr)  # Entwicklungsumgebung oder Type-Checker warnt hier
+```
+
+Hier würde ein Type-Checker (oft standardmäßig in Entwicklungsumgebungen enthalten) eine Warnung ausgeben, weil die Funktion ein `pd.DataFrame` erwartet, aber ein `numpy.ndarray` übergeben wird. Ohne Typ-Annotationen könnte dieser Fehler erst zur Laufzeit auftreten, was schwerer zu debuggen ist.
+
+Type-Checker warnen auch, wenn die Möglichkeit besteht, dass eine Funktion einen Wert zurückgeben kann, der nicht annotiert wurde:
+
+```{python}
+def is_odd(number: int) -> bool:
+    """
+    Ermittelt ob eine Zahl gerade ist.
+    """
+    if (number % 2 == 0):
+        return False
+    else:
+        return "True" # Entwicklungsumgebung warnt hier, da nicht alle Pfade der Funktion einen bool ausgeben
+```
+
+## Code-Organisation und Importe
+
+In größeren Projekten ist es sinnvoll, den Code auf mehrere Dateien zu verteilen. Genau so wie wir Module wie numpy importiert haben, können wir auch Funktionen direkt aus anderen Skriptdateien importieren. Dadurch können wir Code in logische Kategorien einteilen und einfach zwischen verschiedenen Projekten teilen.
+
+### Import von Modulen
+Angenommen, wir haben die folgende Projektstruktur:
+```
+projekt/
+│── main.py
+│── utils/
+│   │── __init__.py
+│   │── mathetools.py
+```
+
+
+
+`mathetools.py` enthält unsere Zylinderberechnungsfunktion
+```{python}
+# Datei: utils/mathetools.py
+PI: float = 3.14159 # Auch bei der Erstellung einer Variable kann der Typ vorgegeben werden
+
+def berechne_zylindervolumen(radius: float, hoehe: float) -> float:
+    """
+    Berechnet das Volumen eines Zylinders mit Typ-Annotationen.
+    
+    Parameter:
+    radius (float): Der Radius der Zylinderbasis.
+    hoehe (float): Die Höhe des Zylinders.
+    
+    Rückgabewert:
+    float: Das berechnete Volumen des Zylinders.
+    """
+    grundflaeche: float = PI * radius ** 2
+    volumen: float = grundflaeche * hoehe
+    return volumen
+```
+
+Die Datei `__init__.py` ist in diesem Fall leer. Sie dient hier dazu anzuzeigen, dass es sich bei dem Verzeichnis `utils` um ein Paket handelt, welches man importieren kann.
+
+
+Nun kann in `main.py` die Funktion importiert und verwendet werden:
+
+```{python}
+#| eval: false
+# Datei: main.py
+from utils.mathetools import berechne_zylindervolumen
+
+ergebnis = berechne_zylindervolumen(5, 20)
+```
+
+
+:::{.callout-note title="Statische Typisierung"}
+Eine solche Projektstruktur, mit einem Hauptskript, 
+:::
+
+### Übungsfragen
+
+Welcher Funktionsaufruf wird einen Fehler verursachen?
+
+```{python}
+#| eval: false
+
+def function_1(arg1):
+    print(arg1)
+
+def function_2(arg1, arg2, arg3: int = 5):
+    return arg1 + arg2 + arg3
+
+def function_3():
+    print(arg3)
+
+def function_4(arg1: str = 5):
+    print(arg1)
+
+function_1(42) # 1
+function_2(5.0, arg2 = -15) # 2
+function_3() # 3
+function_4() # 4
+```
+
+Lösung
+- 1 -> Kein Fehler
+- 2 -> Kein Fehler
+- 3 -> Fehler. arg3 ist nicht definiert im scope von function_3
+- 4 -> Kein Fehler. es ist zwar ein falscher Typ fuer das Argument vorgegeben, aber zur Laufzeit wird dieser nicht geprueft
+
+Überlege dir einen sinnvollen Funktionsnamen, Namen für die Argumente, einen Docstring und ergänze Typ-Annotationen:
+```{python}
+import pandas as pd
+
+def function(df, arg2, arg3, arg4):
+    df_filtered = df[df[arg2] >= arg3]
+    df_sorted = df_filtered.sort_values(by=arg4)
+    return df_sorted
+
+
+data = {
+    "name": ["A", "B", "C", "D"],
+    "value": [5, 15, 25, 8],
+    "score": [50, 80, 90, 60]
+}
+
+df = pd.DataFrame(data)
+function(df, "value", 10, "score")
+```
+
+Lösung
+```{python}
+def preprocess_dataframe(df: pd.DataFrame, filter_column: str, filter_threshold: int, sort_by: str) -> pd.DataFrame:
+    """
+    Verarbeitet einen Pandas DataFrame mit Filtern, Auswahl und Sortierung.
+
+    Parameter:
+    df (pd.DataFrame): Der Eingabe-DataFrame.
+    filter_column (str): Spalte, nach der gefiltert wird.
+    threshold (float): Mindestwert, um Zeilen zu behalten.
+    sort_by (str): Spalte, nach der sortiert wird.
+
+    Rückgabewert:
+    pd.DataFrame: Der verarbeitete DataFrame.
+    """
+    df_filtered = df[df[filter_column] >= filter_threshold]
+    df_sorted = df_filtered.sort_values(by=sort_by)
+    return df_sorted
+```
